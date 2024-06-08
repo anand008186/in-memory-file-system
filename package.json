@@ -1,0 +1,18 @@
+{
+  "name": "in-memory-file-system",
+  "version": "1.0.0",
+  "description": "An in-memory file system implemented in Node.js.",
+  "main": "src/cli.js",
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "readline": "^1.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
