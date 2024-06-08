@@ -19,14 +19,13 @@ The project is structured as follows:
   - `README.md`: This document.
 - `package.json`: Defines the project dependencies and scripts.
 - `jest.config.js`: Configures Jest for testing.
-- `Dockerfile`: Provides a Docker setup for the project.
+
 
 ## Setup
 
 ### Prerequisites
 
 - Node.js (>= 14.x)
-- Docker (optional)
 
 ### Installation
 
