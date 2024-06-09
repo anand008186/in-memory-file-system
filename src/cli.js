@@ -1,7 +1,29 @@
 const readline = require('readline');
 const FileSystem = require('./FileSystem');
 
+const args = process.argv.slice(2);
+
+let options = {};
+if (args.length > 0) {
+    try {
+        options = JSON.parse(args[0]);
+    } catch (e) {
+        console.error('Invalid JSON input for options:', e.message);
+        process.exit(1);
+    }
+}
+
+
 const fs = new FileSystem();
+if (options.load_state === 'true' && options.path) {
+  try {
+    fs.loadState(options.path);
+    console.log('State loaded successfully.');
+  } catch (e) {
+    console.error('Failed to load state:', e.message);
+    process.exit(1);
+  }
+}
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -31,7 +53,7 @@ rl.on('line', (line) => {
         fs.touch(args[0]);
         break;
       case 'echo':
-        const text = args.slice(0, -2).join(' ').replace(/['"]+/g, '');
+        const text = args.slice(0, -1).join(' ').replace(/['"]+/g, '');
         const file = args[args.length - 1];
         fs.echo(text, file);
         break;
@@ -45,7 +67,25 @@ rl.on('line', (line) => {
         fs.rm(args[0]);
         break;
       case 'exit':
-        rl.close();
+        if (options.save_state === 'true' && options.path) {
+          fs.saveState(options.path);
+          console.log('State saved successfully.');
+          rl.close();
+        } else
+        if (options.load_state === 'true' && options.path) {
+          rl.question('Do you want to save the current state? (yes/no) ', (answer) => {
+            if (answer.trim().toLowerCase() === 'yes') {
+              fs.saveState(options.path);
+              console.log('State saved successfully.');
+            } else {
+              console.log('State not saved.');
+            }
+            rl.close(); // Close the readline interface after handling the user input
+          });
+        } else {
+          rl.close();
+        }
+
         return;
       default:
         console.log(`Unknown command: ${command}`);
